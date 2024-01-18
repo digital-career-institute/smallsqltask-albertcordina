@@ -1,1 +1,46 @@
+CREATE TABLE Departments (
+    DepartmentID INT PRIMARY KEY,
+    DepartmentName VARCHAR(50) NOT NULL,
+    Location VARCHAR(50)
+);
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY,
+    EmployeeName VARCHAR(50) NOT NULL,
+	Salary DECIMAL(10, 2),
+    DepartmentID INT,
+    FOREIGN KEY (DepartmentID) REFERENCES Departments(DepartmentID)
+);
+
+INSERT INTO Departments (DepartmentID, DepartmentName, Location) VALUES
+(1, 'HR', 'New York'),
+(2, 'Finance', 'San Francisco'),
+(3, 'Marketing', 'Los Angeles');
+
+INSERT INTO Employees (EmployeeID, EmployeeName, Salary, DepartmentID) VALUES
+(101, 'John Doe', 30000, 1),
+(102, 'Jane Smith', 20000, 2),
+(103, 'Robert Johnson', 30000, 3),
+(104, 'Emily Davis', 20000, 1),
+(105, 'Michael Brown', 30000, 2),
+(106, 'Tony Smith', 20000, 3);
+
+
+-- Task: Write a SQL query to find the average salary for each department and also 
+      -- include the total number of employees in each department. 
+      -- Display the results in descending order of the average salary:
+	  
+SELECT -- Select the columns to be displayed in the result set.
+    d.DepartmentID,
+    d.DepartmentName,
+    AVG(e.Salary) AS AverageSalary, -- Calculate the average salary for each department.
+    COUNT(e.EmployeeID) AS TotalEmployees -- Count the total number of employees.
+FROM -- Specify the tables involved in the query (Departments and Employees).
+    Departments d
+JOIN -- Join the Departments and Employees tables based ON the common DepartmentID.
+    Employees e ON d.DepartmentID = e.DepartmentID
+GROUP BY -- Group the results by DepartmentID and DepartmentName to calculate the average 
+         -- salary and total number of employees for each department.
+    d.DepartmentID, d.DepartmentName
+ORDER BY
+    AverageSalary DESC; -- Display the results in descending order of the average salary.
 
